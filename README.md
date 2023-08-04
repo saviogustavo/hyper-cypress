@@ -2,13 +2,13 @@
 
 # E2E cypress tests for BlazeMeter Demo Store App
 
-- to execute this test suite
+ to execute this test suite
 
-     *npm install*
+     npm install
 
-- to open cypress run the following command on your command prompt
+ to open cypress run the following command on your command prompt
 
-     *npx cypress open*
+     npx cypress open
 
 
 Versions this project was build:
