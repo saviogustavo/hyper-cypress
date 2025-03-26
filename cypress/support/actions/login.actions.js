@@ -1,5 +1,6 @@
 Cypress.Commands.add('visitSite', () => {
-    cy.visit('https://www.demoblaze.com')
+    const baseUrl = Cypress.env('CYPRESS_BASE_URL');
+    cy.visit(baseUrl);
 })
 
 
