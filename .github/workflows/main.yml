@@ -39,7 +39,6 @@ jobs:
       # Rodar os testes do Cypress
       - name: Cypress run
         uses: cypress-io/github-action@v6
-        with:
         env:
           CYPRESS_BASE_URL: ${{ env.CYPRESS_BASE_URL }}  # Passar a URL configurada para o Cypress
 
