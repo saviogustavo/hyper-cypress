@@ -1,5 +1,9 @@
 name: End-to-end tests
-on: push
+on:
+  push:
+    branches:
+      - main  # ou qualquer outra branch que você queira que dispare a ação
+  workflow_dispatch:  # Permite execução manual
 jobs:
   cypress-run:
     runs-on: ubuntu-24.04
