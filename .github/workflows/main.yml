@@ -36,15 +36,18 @@ jobs:
         run: |
           npm install
 
-      # Rodar os testes do Cypress
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          # Para garantir que está rodando em modo headless
-          browser: chrome
-          headless: true  # Modo headless
-        env:
-          CYPRESS_BASE_URL: ${{ env.CYPRESS_BASE_URL }}  # Passar a URL configurada para o Cypress
+      # Instalar o Xvfb para emular um servidor gráfico
+      - name: Set up Xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+
+      # Rodar o Cypress com Xvfb
+      - name: Run Cypress tests with Xvfb
+        run: |
+          export DISPLAY=:99
+          Xvfb :99 &  # Inicia o Xvfb em um display virtual
+          npx cypress run  # Execute os testes com o comando Cypress run
 
       # Subir screenshots e vídeos, caso falhe algum teste
       - uses: actions/upload-artifact@v4
