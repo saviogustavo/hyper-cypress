@@ -1,29 +1,59 @@
 name: End-to-end tests
+
 on:
   push:
     branches:
       - main  # ou qualquer outra branch que você queira que dispare a ação
-  workflow_dispatch:  # Permite execução manual
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Escolha o ambiente'
+        required: true
+        default: 'devops'
+        type: choice
+        options:
+          - devops
+          - stage
+
 jobs:
   cypress-run:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # Install npm dependencies, cache them correctly
-      # and run all Cypress tests
+
+      # Definir a URL de acordo com o ambiente escolhido
+      - name: Set environment URL
+        run: |
+          if [ "${{ github.event.inputs.environment }}" == "devops" ]; then
+            echo "CYPRESS_BASE_URL=https://www.demoblaze.com" >> $GITHUB_ENV
+          elif [ "${{ github.event.inputs.environment }}" == "stage" ]; then
+            echo "CYPRESS_BASE_URL=https://www.demoblaze.com" >> $GITHUB_ENV
+          fi
+
+      # Instalar dependências do npm
+      - name: Install dependencies
+        run: |
+          npm install
+
+      # Rodar os testes do Cypress
       - name: Cypress run
         uses: cypress-io/github-action@v6
- # after the test run completes store videos and any screenshots
+        with:
+          start: npm start  # ou o comando que você usa para iniciar o app
+        env:
+          CYPRESS_BASE_URL: ${{ env.CYPRESS_BASE_URL }}  # Passar a URL configurada para o Cypress
+
+      # Subir screenshots e vídeos, caso falhe algum teste
       - uses: actions/upload-artifact@v4
-        # add the line below to store screenshots only on failures
-        if: failure() #so vai gerar os screenshots se tiver falhado algum teste
+        if: failure()
         with:
           name: cypress-screenshots
           path: cypress/screenshots
-          if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
+          if-no-files-found: ignore
+
       - uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
           path: cypress/videos
-          if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
+          if-no-files-found: ignore
