@@ -40,7 +40,6 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          start: npm start  # ou o comando que você usa para iniciar o app
         env:
           CYPRESS_BASE_URL: ${{ env.CYPRESS_BASE_URL }}  # Passar a URL configurada para o Cypress
 
