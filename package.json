@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "open": "cypress open",
+    "cypress:run": "cypress run",
     "test": "cypress run --browser chrome --headless --env TAGS=@automated-dev",
     "test:publish": "hiptest-publisher -c cucumber.config --push=cypress/reports/*.xml --token=$CUCUMBER_PROJECT_TOKEN --test-run-id=$CUCUMBER_TEST_RUN_ID"
   },
