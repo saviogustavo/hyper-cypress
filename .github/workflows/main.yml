@@ -3,7 +3,7 @@ name: End-to-end tests
 on:
   push:
     branches:
-      - main  # ou qualquer outra branch que você queira que dispare a ação
+      - main  # Ou qualquer outra branch que você queira que dispare a ação
   workflow_dispatch:
     inputs:
       environment:
@@ -33,17 +33,14 @@ jobs:
 
       # Instalar dependências do npm
       - name: Install dependencies
-        run: |
-          npm install
+        run: npm install
 
-      name: Install dependencies
-        run: |
-          npm install
-
+      # Rodar o Cypress com Docker
       - name: Run Cypress tests with Docker
         run: |
-          docker run -e CYPRESS_baseUrl=$CYPRESS_BASE_URL -v $(pwd):/e2e -w /e2e cypress/included:9.0.0
+          docker run -e CYPRESS_baseUrl=$CYPRESS_BASE_URL -v $(pwd):/e2e -w /e2e cypress/included:12.0.0
 
+      # Subir screenshots e vídeos, caso falhe algum teste
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
