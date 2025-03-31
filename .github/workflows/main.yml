@@ -36,25 +36,25 @@ jobs:
         run: |
           npm install
 
-      # Instalar o Xvfb para emular um servidor gráfico
-      - name: Set up Xvfb
+      name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
+          npm install
 
-      # Rodar o Cypress com Xvfb
-      - name: Run Cypress tests with Xvfb
+      - name: Run Cypress tests with Docker
         run: |
-          export DISPLAY=:99
-          Xvfb :99 &  # Inicia o Xvfb em um display virtual
-          npx cypress run  # Execute os testes com o comando Cypress run
+          docker run -e CYPRESS_baseUrl=$CYPRESS_BASE_URL -v $(pwd):/e2e -w /e2e cypress/included:9.0.0
 
-      # Subir screenshots e vídeos, caso falhe algum teste
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-screenshots
           path: cypress/screenshots
+          if-no-files-found: ignore
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: cypress/videos
           if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v4
